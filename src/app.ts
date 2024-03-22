@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
-import todoRouter from "./routes/todoRoutes";
 import recipeRouter from "./routes/recipeRoutes";
+import userRouter from "./routes/userRoutes";
+
 const app = express();
 
 // MIDDLEWARE
@@ -27,10 +28,11 @@ app.use(
 // app.use(cors(corsOptionsDelegate));
 
 // ROUTES
-app.use("/todos", todoRouter);
-app.use("/recipe", recipeRouter);
 app.get("/", (req, res) => {
   res.status(200).send("Welcome to Our Express Server!!!!");
 });
+
+app.use("/recipe", recipeRouter);
+app.use("/user", userRouter);
 
 export default app;

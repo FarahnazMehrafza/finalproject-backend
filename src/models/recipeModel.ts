@@ -63,6 +63,11 @@ const recipeSchema = new Schema({
     ref: "User",
     required: false,
   },
+  mealPlans: {
+    type: Schema.Types.ObjectId,
+    ref: "MealPlan",
+    required: false,
+  },
   category: {
     type: String,
     enum: [
