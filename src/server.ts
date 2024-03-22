@@ -1,12 +1,11 @@
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
-import express from "express";
-import mongoose from "mongoose";
 import app from "./app";
 
 // ADD CONNECTION TO MONGODB
 if (
-  process.env.DATABASE == undefined ||
+  process.env.DATABASE === undefined ||
   process.env.DATABASE_PASSWORD === undefined
 ) {
   throw new Error("DATABASE environment variable(s) not set");
@@ -30,8 +29,8 @@ mongoose.connection
     console.log("connection failed", error);
   });
 
+// START THE SERVER
 const PORT: string | number = process.env.PORT ?? 8000;
-
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });

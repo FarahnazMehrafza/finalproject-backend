@@ -1,26 +1,21 @@
 import express from "express";
-
-// import commentRouter from "./routes/commentRoutes";
-// import mealPlanRouter from "./routes/mealRoutes";
-// import userRouter from "./routes/userRoutes";
-
+import cors from "cors";
+import todoRouter from "./routes/todoRoutes";
+import recipeRouter from "./routes/recipeRoutes";
 const app = express();
 
-//MIDDLEWARE
+// MIDDLEWARE
 app.use(express.json({ limit: "10kb" }));
 // Url Encoder, Allows express to parse data being sent from a form
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://localhost:5173, www.productfrontend.com",
+  })
+);
 
-// var allowlist = [
-//   "http://localhost:5173",
-//   "https://my-product-inventory.vercel.app",
-// ];
-// var corsOptionsDelegate = function (req: any, callback: any) {
+// var allowlist = ["http://example1.com", "http://example2.com"];
+// var corsOptionsDelegate = function (req, callback) {
 //   var corsOptions;
 //   if (allowlist.indexOf(req.header("Origin")) !== -1) {
 //     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
@@ -32,16 +27,10 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 // app.use(cors(corsOptionsDelegate));
 
 // ROUTES
+app.use("/todos", todoRouter);
+app.use("/recipe", recipeRouter);
 app.get("/", (req, res) => {
   res.status(200).send("Welcome to Our Express Server!!!!");
 });
-
-// app.use("/comment", commentRouter);
-// // app.use("/mealPlan", mealPlanRouter);
-// app.use("/user", userRouter);
-
-// app.use((req, res) => {
-//   res.status(404).send("Not Found");
-// });
 
 export default app;
