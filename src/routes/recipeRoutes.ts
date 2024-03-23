@@ -9,6 +9,7 @@ import {
   // searchRecipe,
   // getRecipeByCategory,
   // getRecipeByTag,
+  addRecipeToDate,
 } from "../controllers/recipeController";
 
 const router = express.Router();
@@ -22,5 +23,7 @@ router.route("/:id").get(getRecipe).put(updateRecipe).delete(deleteRecipe);
 // router.get("/category/:category", getRecipeByCategory);
 
 // router.get("/tag/:tag", getRecipeByTag);
+
+router.route("/:id/add-recipe").post(addRecipeToDate);
 
 export default router;

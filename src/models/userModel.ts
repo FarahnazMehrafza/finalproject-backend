@@ -1,16 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
 import MealPlan from "./mealPlanModel";
-import Recipe from "./recipeModel";
-
-export interface User extends Document {
-  name: string;
-  email: string;
-  accountName: string;
-  imageURL: string;
-  favoriteRecipes: (typeof Recipe)[];
-  uploadedRecipes: (typeof Recipe)[];
-  userMealPlan: (typeof MealPlan)[];
-}
 
 const userSchema = new Schema({
   name: { type: String, required: true },
@@ -35,8 +24,19 @@ const userSchema = new Schema({
       ref: "MealPlan",
     },
   ],
-
-  // // mealPlan: [mealPlanModel],
 });
 
-export default mongoose.model<User>("User", userSchema);
+userSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    const mealPlan = new MealPlan({
+      userId: this._id,
+      meals: [],
+    });
+    await mealPlan.save();
+
+    this.userMealPlan.push(mealPlan._id);
+  }
+  next();
+});
+
+export default mongoose.model("User", userSchema);
