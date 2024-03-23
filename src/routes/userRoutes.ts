@@ -5,8 +5,9 @@ import {
   addUser,
   getUser,
   getUserMealPlan,
-  updateMeal,
-  deleteMeal,
+  getMealPlanById,
+  updateMealPlan,
+  // deleteMeal,
   addRecipeToDate,
 } from "../controllers/userController";
 
@@ -20,6 +21,6 @@ router.route("/:id/mealplan").get(getUserMealPlan);
 
 router.route("/:id/mealplan/addrecipe").post(addRecipeToDate);
 
-router.route("/:id/mealplan/:id").put(updateMeal).delete(deleteMeal);
+router.route("/:id/mealplan/:id").get(getMealPlanById).put(updateMealPlan);
 
 export default router;

@@ -90,11 +90,9 @@ export const getUserMealPlan = async (req: Request, res: Response) => {
 // POST recipe to meal plan
 export const addRecipeToDate = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
     const { date, mealType, recipeId } = req.body;
 
-    // Find the user and their meal plan
-    const user = await User.findById(id);
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({
         status: "fail",
@@ -110,53 +108,14 @@ export const addRecipeToDate = async (req: Request, res: Response) => {
       });
     }
 
-    // Check if the meal already exists for the date and meal type
-    const existingMeal = mealPlan.meals.find(
-      (meal) => meal.date.toISOString() === date && meal.mealType === mealType
-    );
-
-    if (existingMeal) {
-      // If the meal exists, update its recipe
-      existingMeal.recipe = recipeId;
-    } else {
-      // If the meal does not exist, add a new meal with the recipe
-      mealPlan.meals.push({ date, mealType, recipe: recipeId });
-    }
-
-    // Save the updated meal plan
-    await mealPlan.save();
+    mealPlan.meals.push({ date, mealType, recipe: recipeId });
+    const updatedMealPlan = await mealPlan.save();
 
     res.status(200).json({
       status: "success",
-      data: mealPlan,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      status: "fail",
-      message: "An error occurred while processing your request.",
-    });
-  }
-};
-
-// update a meal plan
-export const updateMeal = async (req: Request, res: Response) => {
-  try {
-    const data = await MealPlan.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!data) {
-      return res.status(404).json({
-        status: "fail",
-        message: "Recipe not found",
-      });
-    }
-
-    res.status(200).json({
-      status: "success",
-      data,
+      data: {
+        mealPlan: updatedMealPlan,
+      },
     });
   } catch (err) {
     res.status(400).json({
@@ -166,16 +125,97 @@ export const updateMeal = async (req: Request, res: Response) => {
   }
 };
 
-// delete a meal plan
-export const deleteMeal = async (req: Request, res: Response) => {
+// get one mealplan
+export const getMealPlanById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const data = await MealPlan.findByIdAndDelete(id);
-    res.status(204).json({
+    const mealPlan = await MealPlan.findById(id);
+
+    if (!mealPlan) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Meal plan not found",
+      });
+    }
+
+    res.status(200).json({
       status: "success",
-      data,
+      data: mealPlan,
     });
   } catch (err) {
-    res.status(500).json({ message: "Error deleting entity" });
+    res.status(500).json({
+      status: "fail",
+      message: "An error occurred while fetching the meal plan",
+    });
   }
 };
+
+// update a meal plan
+export const updateMealPlan = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const update = req.body;
+
+    const updatedMealPlan = await MealPlan.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedMealPlan) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Meal plan not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: updatedMealPlan,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
+// export const updateMeal = async (req: Request, res: Response) => {
+//   try {
+//     const data = await MealPlan.findByIdAndUpdate(req.params.id, req.body, {
+//       new: true,
+//       runValidators: true,
+//     });
+
+//     if (!data) {
+//       return res.status(404).json({
+//         status: "fail",
+//         message: "Recipe not found",
+//       });
+//     }
+
+//     res.status(200).json({
+//       status: "success",
+//       data,
+//     });
+//   } catch (err) {
+//     res.status(400).json({
+//       status: "fail",
+//       message: err,
+//     });
+//   }
+// };
+
+// delete a meal plan
+// export const deleteMeal = async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params;
+//     const data = await MealPlan.findByIdAndDelete(id);
+//     res.status(204).json({
+//       status: "success",
+//       data,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ message: "Error deleting entity" });
+//   }
+// };
