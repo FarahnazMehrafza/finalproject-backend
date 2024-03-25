@@ -4,6 +4,7 @@ import {
   getAllUsers,
   addUser,
   getUser,
+  getUserRecipes,
   getUserMealPlan,
   getMealPlanById,
   updateMealPlan,
@@ -15,7 +16,9 @@ const router = express.Router();
 
 router.route("/").get(getAllUsers).post(addUser);
 
-router.route("/:id").get(getUser).patch(updateUser);
+router.route("/:id").get(getUser);
+
+router.route("/:id/recipes").get(getUserRecipes);
 
 // router.route("/:id/mealplan").get(getUserMealPlan);
 

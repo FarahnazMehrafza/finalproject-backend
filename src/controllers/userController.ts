@@ -39,16 +39,48 @@ export const addUser = async (req: Request, res: Response) => {
 // /users/:id GET: Get details of a specific user.
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const data = await User.findById(req.params.id);
+    const data = await User.findById(req.params.id).populate("uploadedRecipes");
+    console.log(data);
+
+    if (!data) {
+      return res.status(404).json({
+        status: "fail",
+        message: "User not found",
+      });
+    }
 
     res.status(200).json({
       status: "success",
       data,
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(500).json({
       status: "fail",
-      message: err,
+      message: "An error occurred while fetching the user",
+    });
+  }
+};
+
+// get recipe from user
+export const getUserRecipes = async (req: Request, res: Response) => {
+  try {
+    const data = await User.findById(req.params.id).populate("uploadedRecipes");
+
+    if (!data) {
+      return res.status(404).json({
+        status: "fail",
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: data.uploadedRecipes,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "fail",
+      message: "An error occurred while fetching the user's recipes",
     });
   }
 };

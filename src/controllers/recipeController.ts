@@ -1,6 +1,8 @@
 import Recipe from "../models/recipeModel";
-import { Request, Response } from "express";
+import User from "../models/userModel";
 import MealPlan from "../models/mealPlanModel";
+
+import { Request, Response } from "express";
 
 // /recipes GET: Get a list of all recipes.
 export const getAllRecipes = async (req: Request, res: Response) => {
@@ -23,7 +25,13 @@ export const getAllRecipes = async (req: Request, res: Response) => {
 // /recipes POST: Create a new recipe.
 export const addRecipe = async (req: Request, res: Response) => {
   try {
-    const data = await Recipe.create(req.body);
+    const data = new Recipe(req.body);
+    await data.save();
+
+    await User.findByIdAndUpdate(req.body.userId, {
+      $push: { uploadedRecipes: data._id },
+    });
+
     res.status(201).json({
       status: "success",
       data,
@@ -35,6 +43,20 @@ export const addRecipe = async (req: Request, res: Response) => {
     });
   }
 };
+// export const addRecipe = async (req: Request, res: Response) => {
+//   try {
+//     const data = await Recipe.create(req.body);
+//     res.status(201).json({
+//       status: "success",
+//       data,
+//     });
+//   } catch (err) {
+//     res.status(400).json({
+//       status: "fail",
+//       message: err,
+//     });
+//   }
+// };
 
 // /recipes/:id GET: Get details of a specific recipe.
 export const getRecipe = async (req: Request, res: Response) => {
