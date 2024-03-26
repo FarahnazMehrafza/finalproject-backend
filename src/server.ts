@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
+console.log(process.env.DATABASE, process.env.DATABASE_PASSWORD);
 import app from "./app";
 
 // ADD CONNECTION TO MONGODB
