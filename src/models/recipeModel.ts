@@ -6,7 +6,7 @@ const recipeSchema = new Schema({
     required: [true, "Text required!"],
     maxlength: 100,
   },
-  introduction: {
+  description: {
     type: String,
     required: true,
     maxlength: 500,
