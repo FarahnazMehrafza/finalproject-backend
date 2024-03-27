@@ -24,24 +24,24 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
-  ingredients: {
-    type: String,
-    required: true,
-  },
+  // ingredients: {
+  //   type: String,
+  //   required: true,
+  // },
 
-  // ingredients: [
-  //   {
-  //     name: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //     quantity: {
-  //       type: String,
-  //       required: true,
-  //       maxlength: 50,
-  //     },
-  //   },
-  // ],
+  ingredients: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      quantity: {
+        type: String,
+        required: true,
+        maxlength: 50,
+      },
+    },
+  ],
   instructions: [
     {
       type: String,
