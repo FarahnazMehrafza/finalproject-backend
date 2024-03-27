@@ -24,19 +24,10 @@ const recipeSchema = new Schema({
     type: String,
     required: true,
   },
-  ingredients: [
-    {
-      name: {
-        type: String,
-        required: true,
-      },
-      quantity: {
-        type: String,
-        required: true,
-        maxlength: 50,
-      },
-    },
-  ],
+  ingredients: {
+    type: String,
+    required: true,
+  },
   instructions: [
     {
       type: String,
@@ -61,7 +52,7 @@ const recipeSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: false,
   },
   mealPlan: {
     type: Schema.Types.ObjectId,
