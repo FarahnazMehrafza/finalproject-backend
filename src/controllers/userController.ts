@@ -39,9 +39,7 @@ export const addUser = async (req: Request, res: Response) => {
 // /users/:id GET: Get details of a specific user.
 export const getUser = async (req: Request, res: Response) => {
   try {
-    const data = await User.findById(req.params.id).populate(
-      "uploadedRecipes favoriteRecipes"
-    );
+    const data = await User.findById(req.params.id).populate("uploadedRecipes");
     console.log(data);
 
     if (!data) {

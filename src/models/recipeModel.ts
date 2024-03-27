@@ -77,7 +77,7 @@ const recipeSchema = new Schema({
       "Quick-and-Easy",
       "Desserts",
     ],
-    default: "Quick-and-Easy",
+    default: "Main-Course",
     required: true,
   },
   // cookingAdditionalInformation: {
